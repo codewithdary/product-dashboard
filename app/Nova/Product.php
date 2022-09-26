@@ -2,7 +2,6 @@
 
 namespace App\Nova;
 
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Image;
@@ -10,7 +9,6 @@ use Laravel\Nova\Fields\Markdown;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Slug;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Product extends Resource
@@ -30,13 +28,37 @@ class Product extends Resource
     public static $title = 'id';
 
     /**
+     * Spacing between rows
+     * @var string
+     */
+    // public static $tableStyle = 'tight';
+
+    /**
+     * Adds column borders to table
+     * @var bool
+     */
+    //public static $showColumnBorders = true;
+
+    /**
+     * Change the page if a user clicks on a row
+     * @var string
+     */
+    public static $clickAction = 'edit';
+
+    /**
      * The columns that should be searched.
      *
      * @var array
      */
     public static $search = [
-        'id'
+        'id', 'name', 'description', 'sku'
     ];
+
+    /**
+     * Pagination per page
+     * @var int[]
+     */
+    public static $perPageOptions = [50, 100, 150];
 
     /**
      * Get the fields displayed by the resource.
