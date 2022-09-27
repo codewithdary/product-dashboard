@@ -46,8 +46,8 @@ class Brand extends Resource
         return [
             Text::make('Name')
                 ->sortable()
-                ->required()
-                ->showOnPreview(),
+                ->showOnPreview()
+                ->rules('required', 'max:255'),
 
             URL::make('Website URL', 'website')
                 ->showOnPreview()
