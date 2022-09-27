@@ -2,48 +2,29 @@
 
 namespace App\Nova;
 
-use Laravel\Nova\Fields\BelongsTo;
+use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\Currency;
-use Laravel\Nova\Fields\Markdown;
-use Laravel\Nova\Fields\Number;
-use Laravel\Nova\Fields\Slug;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\URL;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Product extends Resource
+class Brand extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\Product::class;
+    public static $model = \App\Models\Brand::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'id';
-
-    /**
-     * Spacing between rows
-     * @var string
-     */
-    // public static $tableStyle = 'tight';
-
-    /**
-     * Adds column borders to table
-     * @var bool
-     */
-    //public static $showColumnBorders = true;
-
-    /**
-     * Change the page if a user clicks on a row
-     * @var string
-     */
-    public static $clickAction = 'edit';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -51,14 +32,8 @@ class Product extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'description', 'sku'
+        'id', 'name'
     ];
-
-    /**
-     * Pagination per page
-     * @var int[]
-     */
-    public static $perPageOptions = [50, 100, 150];
 
     /**
      * Get the fields displayed by the resource.
@@ -69,51 +44,28 @@ class Product extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            Slug::make('Slug')
-                ->from('name')
-                ->required()
-                ->withMeta(['extraAttributes' => [
-                'readonly' => true
-            ]])->hideFromIndex(),
-
             Text::make('Name')
-                ->required()
-                ->showOnPreview()
-                ->placeholder('Product name...')->sortable(),
-
-            Markdown::make('Description')
-                ->required()
-                ->showOnPreview(),
-
-            Currency::make('Price')
-                ->currency('EUR')
-                ->required()
-                ->showOnPreview()
-                ->placeholder('Enter product price...')
-                ->textAlign('left')
-                ->sortable(),
-
-            Text::make('Sku')
-                ->required()
-                ->placeholder('Enter product SKU...')
-                ->help('Number that retailers use to differentiate products and track inventory levels.')
-            ->sortable(),
-
-            Number::make('Quantity')
-                ->required()
-                ->showOnPreview()
-                ->placeholder('Enter Quantity...')
-                ->textAlign('left')
-                ->sortable(),
-
-            BelongsTo::make('Brand')
                 ->sortable()
+                ->required()
                 ->showOnPreview(),
+
+            URL::make('Website URL', 'website')
+                ->showOnPreview()
+                ->required()
+                ->textAlign('left'),
+
+            Text::make('Industry')
+                ->sortable()
+                ->required()
+                ->showOnPreview()
+                ->textAlign('left'),
 
             Boolean::make('Status', 'is_published')
-                ->required()
-                ->textAlign('left')
                 ->sortable()
+                ->showOnPreview()
+                ->textAlign('left'),
+
+            HasMany::make('Products'),
         ];
     }
 
