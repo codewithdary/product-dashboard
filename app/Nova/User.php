@@ -7,6 +7,7 @@ use Illuminate\Validation\Rules;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -62,6 +63,14 @@ class User extends Resource
                 ->onlyOnForms()
                 ->creationRules('required', Rules\Password::defaults())
                 ->updateRules('nullable', Rules\Password::defaults()),
+
+            Select::make('Role')
+                ->sortable()
+                ->showOnPreview()
+                ->options([
+                    'user' => 'User',
+                    'admin'=> 'Admin'
+                ])->displayUsingLabels(),
         ];
     }
 
@@ -107,5 +116,10 @@ class User extends Resource
     public function actions(NovaRequest $request)
     {
         return [];
+    }
+
+    public static function authorizable()
+    {
+        return true;// Set to false to enable Nova authorization for this resource
     }
 }
