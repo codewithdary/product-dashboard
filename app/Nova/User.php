@@ -28,6 +28,14 @@ class User extends Resource
     public static $title = 'name';
 
     /**
+     * @return string
+     */
+    public function subtitle()
+    {
+        return $this->is_admin ? 'ADMIN' : 'USER';
+    }
+
+    /**
      * The columns that should be searched.
      *
      * @var array
