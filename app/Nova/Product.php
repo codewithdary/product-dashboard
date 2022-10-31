@@ -28,19 +28,6 @@ class Product extends Resource
     public static $title = 'name';
 
     /**
-     * @return string
-     */
-    public function subtitle()
-    {
-        return "Brand: {$this->brand->name}";
-    }
-
-    /**
-     * @var int
-     */
-    public static $globalSearchResults = 5;
-
-    /**
      * Spacing between rows
      * @var string
      */

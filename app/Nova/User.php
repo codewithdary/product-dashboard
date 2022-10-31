@@ -28,14 +28,6 @@ class User extends Resource
     public static $title = 'name';
 
     /**
-     * @return string
-     */
-    public function subtitle()
-    {
-        return $this->is_admin ? 'ADMIN' : 'USER';
-    }
-
-    /**
      * The columns that should be searched.
      *
      * @var array
@@ -128,6 +120,6 @@ class User extends Resource
 
     public static function authorizable()
     {
-        return true;// Set to false to enable Nova authorization for this resource
+        return true; // Set to false to enable Nova authorization for this resource
     }
 }
