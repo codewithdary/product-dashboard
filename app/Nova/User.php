@@ -4,6 +4,7 @@ namespace App\Nova;
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
@@ -27,6 +28,12 @@ class User extends Resource
      */
     public static $title = 'name';
 
+    public function subtitle()
+    {
+        return $this->is_admin ? 'ADMIN' : 'USER';
+    }
+
+    public static $globallySearchable = false;
     /**
      * The columns that should be searched.
      *
@@ -64,13 +71,9 @@ class User extends Resource
                 ->creationRules('required', Rules\Password::defaults())
                 ->updateRules('nullable', Rules\Password::defaults()),
 
-            Select::make('Role')
+            Boolean::make('Role', 'is_admin')
                 ->sortable()
-                ->showOnPreview()
-                ->options([
-                    'user' => 'User',
-                    'admin'=> 'Admin'
-                ])->displayUsingLabels(),
+                ->textAlign('left'),
         ];
     }
 
@@ -120,6 +123,6 @@ class User extends Resource
 
     public static function authorizable()
     {
-        return true; // Set to false to enable Nova authorization for this resource
+        return true;
     }
 }

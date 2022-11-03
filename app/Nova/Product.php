@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Filters\ProductBrand;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Currency;
@@ -26,6 +27,12 @@ class Product extends Resource
      * @var string
      */
     public static $title = 'name';
+
+    public function subtitle() {
+        return "Brand: {$this->brand->name}";
+    }
+
+    public static $globalSearchResults = 10;
 
     /**
      * Spacing between rows
@@ -136,7 +143,9 @@ class Product extends Resource
      */
     public function filters(NovaRequest $request)
     {
-        return [];
+        return [
+            new ProductBrand()
+        ];
     }
 
     /**
