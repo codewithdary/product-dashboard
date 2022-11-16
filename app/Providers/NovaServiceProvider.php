@@ -2,8 +2,14 @@
 
 namespace App\Providers;
 
+use App\Nova\Brand;
+use App\Nova\Dashboards\Main;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Menu\MenuItem;
+use Laravel\Nova\Menu\MenuSection;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
 
@@ -22,6 +28,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         // Nova::withoutNotificationCenter();
 
         $this->getFooterContent();
+
+        $this->getCustomMenu();
     }
 
     /**
@@ -89,6 +97,35 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         Nova::footer(function ($request) {
             return Blade::render('nova/footer');
+        });
+    }
+
+    private function getCustomMenu()
+    {
+        Nova::mainMenu(function(Request $request) {
+            return [
+                MenuSection::dashboard(Main::class)
+                    ->icon('chart-bar')
+                    ->withBadge('New', 'success'),
+
+                MenuSection::make('Products', [
+                    MenuItem::make('All Products', '/resources/products'),
+                    MenuItem::make('Create Product', '/resources/products/new'),
+                ])->icon('shopping-bag')->collapsable(),
+
+                Menusection::resource(Brand::class)->icon('tag'),
+
+                MenuSection::make('Users', [
+                    MenuItem::make('All Users', '/resources/users'),
+                    MenuItem::make('Create User', '/resources/users/new')
+                        ->canSee(function(NovaRequest $request) {
+                            return $request->user()->is_admin;
+                        }),
+                ])->icon('users')->collapsable(),
+
+                MenuItem::externalLink('Visit Site', 'https://nova.laravel.com/docs')->openInNewTab()
+
+            ];
         });
     }
 }
